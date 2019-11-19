@@ -1,15 +1,22 @@
 package com.agog.latexmathsample
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import com.agog.mathdisplay.MTFontManager
 import com.agog.mathdisplay.MTMathView
 import com.agog.mathdisplay.MTMathView.MTMathViewMode
-import com.agog.mathdisplay.MTFontManager
-import android.graphics.Color
-import android.widget.TextView
+import com.agog.mathdisplay.parse.MTLineStyle
+import com.agog.mathdisplay.parse.MTMathListBuilder
+import com.agog.mathdisplay.render.MTTypesetter
+import com.agog.mathdisplay.render.trim
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -24,8 +31,59 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         createEquations()
-
     }
+
+    private fun createBitmap(): Bitmap? {
+        val font = MTFontManager.latinModernFontWithSize(40f)
+
+        val latexString = """\vec \bf V_1 \times \vec \bf V_2 =  \begin{vmatrix}
+    \hat \imath &\hat \jmath &\hat k \\
+    \frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
+    \frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0
+    \end{vmatrix}"""
+
+//        val latexString = "e = mc^2"
+
+        val mathList = MTMathListBuilder.buildFromString(latexString)
+
+        if (mathList != null && font != null) {
+            val BITMAPWIDTH = 640
+            val BITMAPHEIGHT = 480
+            val bitmap = Bitmap.createBitmap(BITMAPWIDTH, BITMAPHEIGHT, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            canvas.translate(0.0f, BITMAPHEIGHT.toFloat())
+            canvas.scale(1.0f, -1.0f)
+            canvas.translate(100.0f, 100.0f) // We shift this to catch any coordinate system errors
+
+            val display = MTTypesetter.createLineForMathList(mathList, font, MTLineStyle.KMTLineStyleText)
+            display.draw(canvas)
+
+//            saveBitmap("testRandom.png", bitmap)
+            return bitmap.trim(margin = 20)
+        }
+
+        return null
+    }
+
+//    private fun saveBitmap(filename: String, bitmap: Bitmap) {
+//        val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + filename
+//
+//        FileOutputStream(path).use {
+//            try {
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) // bmp is your Bitmap instance
+//                // PNG is a lossless format, the compression factor (100) is ignored
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            } finally {
+//                try {
+//                    it.close()
+//                } catch (e: IOException) {
+//                    e.printStackTrace()
+//                }
+//
+//            }
+//        }
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -94,11 +152,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun createBitmapView() {
+        val latexBitmap = createBitmap()
+
+        val iv = ImageView(this)
+        iv.setBackgroundColor(Color.parseColor("#d3d3d3"))
+        iv.setImageBitmap(latexBitmap)
+        mainLayout.addView(iv)
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
-        // Font menu
+            // Font menu
             R.id.fontdefault -> {
                 applyfont("latinmodern-math")
                 fontmenucheck(R.id.fontdefault)
@@ -114,7 +181,7 @@ class MainActivity : AppCompatActivity() {
                 fontmenucheck(R.id.fontxits)
                 return true
             }
-        // Size Menu
+            // Size Menu
             R.id.f12 -> {
                 applyfontsize(12.0f)
                 sizemenucheck(R.id.f12)
@@ -135,7 +202,7 @@ class MainActivity : AppCompatActivity() {
                 sizemenucheck(R.id.f40)
                 return true
             }
-        // Mode Menu
+            // Mode Menu
             R.id.modedisplay -> {
                 for (eq in sampleEquations) {
                     eq.labelMode = MTMathViewMode.KMTMathViewModeDisplay
@@ -150,7 +217,19 @@ class MainActivity : AppCompatActivity() {
                 modemenucheck(R.id.modetext)
                 return true
             }
-        // Good for profiling
+            R.id.modebitmap -> {
+                // clear the main layout
+                mainLayout.removeAllViewsInLayout()
+                sampleEquations.clear()
+                mainLayout.invalidate()
+
+                // load a bitmap
+                createBitmapView()
+
+                modemenucheck(R.id.modebitmap)
+                return true
+            }
+            // Good for profiling
             R.id.modereload -> {
                 mainLayout.removeAllViewsInLayout()
                 sampleEquations.clear()
@@ -164,7 +243,7 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-        // Color Menu
+            // Color Menu
             R.id.colorblack -> {
                 for (eq in sampleEquations) {
                     eq.textColor = Color.BLACK

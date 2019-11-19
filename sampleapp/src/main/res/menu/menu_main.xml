@@ -73,6 +73,10 @@
                     android:id="@+id/modetext"
                     android:checkable="true"
                     android:title="Text" />
+                <item
+                    android:id="@+id/modebitmap"
+                    android:checkable="true"
+                    android:title="Bitmap" />
             </group>
             <item
                 android:id="@+id/modereload"
