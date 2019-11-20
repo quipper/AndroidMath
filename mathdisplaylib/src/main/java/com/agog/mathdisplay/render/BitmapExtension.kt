@@ -3,8 +3,6 @@ package com.agog.mathdisplay.render
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.annotation.ColorInt
-import java.lang.Integer.max
-import java.lang.Integer.min
 import java.util.*
 
 /**
@@ -60,16 +58,16 @@ fun Bitmap.trim(@ColorInt color: Int = Color.TRANSPARENT, margin: Int = 0): Bitm
     // add margin if any, and normalize the result
     if (margin != 0) {
         top += margin
-        top = min(top, height)
+        top = kotlin.math.min(top, height)
 
         bottom -= margin
-        bottom = max(bottom, 0)
+        bottom = kotlin.math.max(bottom, 0)
 
         left -= margin
-        left = max(left, 0)
+        left = kotlin.math.max(left, 0)
 
         right += margin
-        right = min(right, width)
+        right = kotlin.math.min(right, width)
     }
 
     return Bitmap.createBitmap(this, left, bottom, right - left, top - bottom)
