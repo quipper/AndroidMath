@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createBitmapView() {
-        val latexBitmap = MTMathGenerator.createBitmap("e = mc^2", this)
+        val latexBitmap = MTMathGenerator.createBitmap("e = mc^2")
 
         val iv = ImageView(this)
         iv.setBackgroundColor(Color.parseColor("#d3d3d3"))
