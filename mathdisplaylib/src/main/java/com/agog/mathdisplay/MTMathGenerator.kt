@@ -1,5 +1,6 @@
 package com.agog.mathdisplay
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import com.agog.mathdisplay.parse.MTLineStyle
@@ -13,15 +14,30 @@ object MTMathGenerator {
     private const val defaultWidth = 640
     private const val defaultHeight = 480
     private const val defaultMargin = 20
-    private val defaultFont: MTFont? = MTFontManager.latinModernFontWithSize(40f)
+    var defaultFont: MTFont? = null
 
+    @JvmStatic
+    fun createBitmap(latexString: String, context: Context): Bitmap? {
+        if (defaultFont == null) initializeDefaultFont(context)
+
+        return createBitmap(latexString, context, defaultFont, defaultWidth, defaultHeight, defaultMargin)
+    }
+
+    @JvmStatic
     fun createBitmap(
             latexString: String,
-            font: MTFont? = defaultFont,
+            context: Context,
+            fontParam: MTFont? = defaultFont,
             bitmapWidth: Int = defaultWidth,
             bitmapHeight: Int = defaultHeight,
             bitmapMargin: Int = defaultMargin
     ): Bitmap? {
+        var font = fontParam
+        if (defaultFont == null) {
+            initializeDefaultFont(context)
+            if (font == null) font = defaultFont
+        }
+
         val mathList = MTMathListBuilder.buildFromString(latexString)
 
         if (mathList != null && font != null) {
@@ -38,5 +54,12 @@ object MTMathGenerator {
         }
 
         return null
+    }
+
+    private fun initializeDefaultFont(context: Context) {
+        if (defaultFont == null) {
+            MTFontManager.setContext(context)
+            defaultFont = MTFontManager.latinModernFontWithSize(40f)
+        }
     }
 }
