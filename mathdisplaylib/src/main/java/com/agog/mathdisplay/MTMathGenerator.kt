@@ -25,6 +25,12 @@ object MTMathGenerator {
     }
 
     @JvmStatic
+    fun createBitmap(latexString: String, fontColor: Int): Bitmap? {
+        defaultFont?.color = fontColor
+        return createBitmap(latexString, defaultFont, defaultWidth, defaultHeight, defaultMargin)
+    }
+
+    @JvmStatic
     fun createBitmap(latexString: String, font: MTFont): Bitmap? {
         return createBitmap(latexString, font, defaultWidth, defaultHeight, defaultMargin)
     }
