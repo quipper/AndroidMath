@@ -1,15 +1,17 @@
 package com.agog.latexmathsample
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import com.agog.mathdisplay.MTFontManager
+import com.agog.mathdisplay.MTMathGenerator
 import com.agog.mathdisplay.MTMathView
 import com.agog.mathdisplay.MTMathView.MTMathViewMode
-import com.agog.mathdisplay.MTFontManager
-import android.graphics.Color
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -24,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         createEquations()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -94,11 +95,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun createBitmapView() {
+        val latexBitmap = MTMathGenerator.createBitmap("e = mc^2")
+
+        val iv = ImageView(this)
+        iv.setBackgroundColor(Color.parseColor("#d3d3d3"))
+        iv.setImageBitmap(latexBitmap)
+        mainLayout.addView(iv)
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
-        // Font menu
+            // Font menu
             R.id.fontdefault -> {
                 applyfont("latinmodern-math")
                 fontmenucheck(R.id.fontdefault)
@@ -114,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 fontmenucheck(R.id.fontxits)
                 return true
             }
-        // Size Menu
+            // Size Menu
             R.id.f12 -> {
                 applyfontsize(12.0f)
                 sizemenucheck(R.id.f12)
@@ -135,7 +145,7 @@ class MainActivity : AppCompatActivity() {
                 sizemenucheck(R.id.f40)
                 return true
             }
-        // Mode Menu
+            // Mode Menu
             R.id.modedisplay -> {
                 for (eq in sampleEquations) {
                     eq.labelMode = MTMathViewMode.KMTMathViewModeDisplay
@@ -150,7 +160,19 @@ class MainActivity : AppCompatActivity() {
                 modemenucheck(R.id.modetext)
                 return true
             }
-        // Good for profiling
+            R.id.modebitmap -> {
+                // clear the main layout
+                mainLayout.removeAllViewsInLayout()
+                sampleEquations.clear()
+                mainLayout.invalidate()
+
+                // load a bitmap
+                createBitmapView()
+
+                modemenucheck(R.id.modebitmap)
+                return true
+            }
+            // Good for profiling
             R.id.modereload -> {
                 mainLayout.removeAllViewsInLayout()
                 sampleEquations.clear()
@@ -164,7 +186,7 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-        // Color Menu
+            // Color Menu
             R.id.colorblack -> {
                 for (eq in sampleEquations) {
                     eq.textColor = Color.BLACK

@@ -1,17 +1,18 @@
 package com.agog.mathdisplay.render
 
-import android.content.Context
 import android.content.res.AssetManager
-import com.agog.mathdisplay.parse.MathDisplayException
+import android.graphics.Color
 import android.util.Log
+import com.agog.mathdisplay.parse.MathDisplayException
 
-public fun PackageWarning(str: String) {
-    Log.w("com.agog.mathdisplay.render", str)
+fun PackageWarning(str: String) {
+    Log.w("packageWarning", "com.agog.mathdisplay.render$str")
 }
 
 
 class MTFont(private val assets: AssetManager, val name: String, val fontSize: Float, isCopy: Boolean = false) {
     var mathTable: MTFontMathTable = MTFontMathTable(this, null)
+    var color: Int = Color.BLACK
 
     init {
         val fontpath = "fonts/$name.otf"

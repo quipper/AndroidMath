@@ -1,6 +1,30 @@
-[![](https://jitpack.io/v/gregcockroft/AndroidMath.svg)](https://jitpack.io/#gregcockroft/AndroidMath)
+# AndroidMath to Bitmap
+
+How to use this offline latex to bitmap generator?
+
+1. Set up the project as @gregcockroft described on his original readme below.
+
+2. run this command on the AndroidMath project:
+```./gradlew mathdisplaylib:assemble```
+
+3. Copy the result .aar file from:
+```../AndroidMath/mathdisplaylib/build/outputs/aar```
+
+4. To:
+```../YourAndroidProject/app/libs```
+
+5. Add this on build.gradlew
+```implementation(name: "mathdisplaylib-debug", ext: "aar")```
+
+6. Initialize the mathdisplaylib on (preferably) Application level onCreate():
+```MTFontManager.setContext(context);```
+
+7. Call the offline latex bitmap generator from anywhere on the project
+```MTMathGenerator.createBitmap("latex str")```
+
 
 # AndroidMath
+[![](https://jitpack.io/v/gregcockroft/AndroidMath.svg)](https://jitpack.io/#gregcockroft/AndroidMath)
 
 - [x] Rendering of LaTeX Math inside of an Android View
 - [x] No dependency on WebView
