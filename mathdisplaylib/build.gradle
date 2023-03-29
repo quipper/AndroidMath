@@ -62,9 +62,9 @@ repositories {
 // This pulls in freetype. Dependencies are in cdep.yml
 // This only needs to run once but is being run before every build right now so that gradle command line builds will work
 
-task runcdep(type:Exec) {
-    commandLine './cdep'
-}
+//task runcdep(type:Exec) {
+//    commandLine './cdep'
+//}
 
 preBuild.dependsOn(runcdep)
 
