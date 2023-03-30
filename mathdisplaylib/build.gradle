@@ -84,7 +84,7 @@ afterEvaluate {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.github.gregcockroft'
+                groupId = 'com.github.quipper'
                 artifactId = 'AndroidMath'
                 version = 'v1.0.0'
             }
