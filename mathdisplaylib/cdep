@@ -6,7 +6,7 @@
 ##
 ##############################################################################
 
-MANIFEST=https://raw.githubusercontent.com/jomof/cdep/master/boot.yml
+MANIFEST=https://gist.githubusercontent.com/andremw96/0361357ebabd6def3be12ecc264462f3/raw/ede551f39968dd3d811645e46eb566e575f6a425/cdep_boot.yml
 
 if [ -f "$1" ]; then
     MANIFEST=$1
