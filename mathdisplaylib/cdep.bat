@@ -5,7 +5,7 @@
 @rem
 @rem ##########################################################################
 
-set MANIFEST=https://raw.githubusercontent.com/jomof/cdep/master/boot.yml
+set MANIFEST=https://gist.githubusercontent.com/andremw96/0361357ebabd6def3be12ecc264462f3/raw/ede551f39968dd3d811645e46eb566e575f6a425/cdep_boot.yml
 
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
